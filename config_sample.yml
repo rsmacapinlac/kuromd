@@ -1,0 +1,11 @@
+---
+notes:
+  # where your notes are kept
+  # folder: '~/Nextcloud/Journal/INBOX'
+  folder: ''
+  one_on_one:
+    # where your one on one notes are sent to
+    # I currently have it going to an n8n automation
+    # url 'https://n8nurl/something'
+    url: ''
+
