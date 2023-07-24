@@ -33,19 +33,18 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'guard-rubocop'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'solargraph'
+  spec.add_development_dependency 'rspec'
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency 'activesupport'
-  spec.add_dependency 'commander'
-  spec.add_dependency 'dates_from_string'
-  spec.add_dependency 'dotenv'
-  spec.add_dependency 'faraday'
-  spec.add_dependency 'ruby_matter'
-  spec.add_dependency 'selenium-webdriver'
-  spec.add_dependency 'terminal-table'
-  spec.add_dependency 'whenever'
+  spec.add_dependency 'activesupport', '~> 7.0.6'
+  spec.add_dependency 'commander', '~> 4.6.0'
+  spec.add_dependency 'dates_from_string', '~> 0.9.7'
+  spec.add_dependency 'dotenv', '~> 2.8.1'
+  spec.add_dependency 'faraday', '~> 2.7.10'
+  spec.add_dependency 'ruby_matter', '~> 0.9.8'
+  spec.add_dependency 'selenium-webdriver', '~> 4.10.0'
+  spec.add_dependency 'terminal-table', '~> 3.0.2'
+  spec.add_dependency 'whenever', '~> 1.0.0'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
