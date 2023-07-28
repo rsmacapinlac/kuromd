@@ -6,9 +6,8 @@ require 'rubygems'
 require 'commander/import'
 
 require 'kuromd/configurable'
-# require 'kuromd/config'
+require 'kuromd/folder'
 require 'kuromd/version'
-require 'kuromd/note/folder'
 
 require 'fileutils'
 require 'pathname'
@@ -35,8 +34,8 @@ command :notes do |c|
     # attempt to read config if the global config file is set
     Kuromd::Configurable.configure({ config_file: options.config, key: 'notes' })
     # config = Kuromd::Config.new({ config_file: options.config })
-    config = Kurmd::Configurable.get_config
-    notes_folder = Kuromd::Note::Folder.new
+    config = Kuromd::Configurable.get_config
+    notes_folder = Kuromd::Folder.new
 
     # display the table
     puts notes_folder.build_table

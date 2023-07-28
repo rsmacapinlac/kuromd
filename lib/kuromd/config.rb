@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'kuromd'
 
 module Kuromd
   # Handles pulling the configuration from a configuration file.
@@ -23,6 +24,7 @@ module Kuromd
       @params = YAML.load(File.read(config_file))
       # narrow down the parameters if a key is present
       @params = @params[key] unless key.nil?
+      Kuromd.logger.info "Configuration initialized: #{config_file}"
     end
   end
 end

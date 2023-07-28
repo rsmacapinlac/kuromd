@@ -8,15 +8,15 @@ Erm... this is very much still a todo.
 
 ### Configuration File
 
-Unless specified using the '-c' flag, lain expects the default configuration file in:
+Unless specified using the '-c' flag, kuromd expects the default configuration file in:
 
 ```
-~/.config/lain/configuration.yml
+~/.config/kuromd/configuration.yml
 ```
 
 ## Usage
 
-### lain
+### KuroMD
 
 ## Development
 
@@ -27,4 +27,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lain.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rsmacapinlac/lain

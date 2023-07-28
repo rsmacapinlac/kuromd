@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'kuromd/configurable'
-require 'kuromd/note/note'
-require 'kuromd/note/postable'
+require 'kuromd/basenote'
+require 'kuromd/postable'
 
 module Kuromd
-  module Note
+  module OneOnOne
     # Represents a note for a 1:1
-    class OneOnOne < Note
+    class Note < Kuromd::BaseNote
       include Configurable
       include Postable
 
@@ -17,15 +17,21 @@ module Kuromd
         super
         config = Kuromd::Configurable.get_config
         @params = config.params['one_on_one']
+        Kuromd.logger.info "One on one note initialized: #{@params}"
       end
 
       def valid?
         # needs a note_date and monica_id
-        !@note_data['note_date'].nil? && !@note_data['monica_id'].nil?
+        is_valid = !@note_data['note_date'].nil? &&
+          !@note_data['monica_id'].nil? &&
+          !@note_data['title'].nil?
+
+        Kuromd::logger.info "One on One Note object valid? #{is_valid}"
+        is_valid
       end
       
       def process
-        # puts valid?
+        Kuromd::logger.info "Processing: #{@note_data['title']}, #{@note_data['note_date']}"
         url = @params['url']
 
         # Invoke Kuromd::Note::Postable's send method

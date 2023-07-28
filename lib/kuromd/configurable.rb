@@ -5,14 +5,14 @@ require 'kuromd/config'
 module Kuromd
   module Configurable
 
-    @@config = nil
+    @config = nil
 
     def set_config(value)
-      @@config = value
+      @config = value
     end
 
     def get_config
-      @@config
+      @config
     end
 
     def configure(params = {})
