@@ -14,7 +14,7 @@ module Kuromd
 
     def initialize
       @config = Kuromd::Configurable.get_config
-      params = @config.params
+      params = @config.params['notes']
 
       @notes_folder = params['folder']
       @notes_folder = File.expand_path(@notes_folder)

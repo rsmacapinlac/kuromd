@@ -16,7 +16,7 @@ module Kuromd
       def initialize(params = {})
         super
         config = Kuromd::Configurable.get_config
-        @params = config.params['one_on_one']
+        @params = config.params['notes']['one_on_one']
         Kuromd.logger.info "One on one note initialized: #{@params}"
       end
 
@@ -31,7 +31,7 @@ module Kuromd
       end
       
       def process
-        Kuromd::logger.info "Processing: #{@note_data['title']}, #{@note_data['note_date']}"
+        Kuromd::logger.info "Processing One on one Note: #{@note_data['title']}, #{@note_data['note_date']}"
         url = @params['url']
 
         # Invoke Kuromd::Note::Postable's send method

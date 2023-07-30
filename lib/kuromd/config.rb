@@ -16,15 +16,26 @@ module Kuromd
       'configuration.yml'
     end
 
+    def get_config(key)
+      if key.nil?
+        @params
+      else
+        @params[key]
+      end
+    end
+
     def initialize(params = {})
       key = params[:key]
       config_file = File.expand_path(File.join(configuration_folder, configuration_file))
       # replace the configuration with what was passed
       config_file = File.expand_path params[:config_file] unless params[:config_file].nil?
+
       @params = YAML.load(File.read(config_file))
+
       # narrow down the parameters if a key is present
-      @params = @params[key] unless key.nil?
-      Kuromd.logger.info "Configuration initialized: #{config_file}"
+      # @params = @params[key] unless key.nil?
+      Kuromd.logger.info "Configuration initialized: #{config_file} with key: #{key}"
+      # get_config(key)
     end
   end
 end

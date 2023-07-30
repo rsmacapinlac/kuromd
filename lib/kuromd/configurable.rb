@@ -16,7 +16,11 @@ module Kuromd
     end
 
     def configure(params = {})
-      set_config(Kuromd::Config.new({ config_file: params[:config_file], key: params[:key] }))
+      if @config.nil?
+        set_config(Kuromd::Config.new({ config_file: params[:config_file], key: params[:key] }))
+      else
+        get_config
+      end
     end
   end
 end

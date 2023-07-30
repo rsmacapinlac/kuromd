@@ -13,13 +13,7 @@ module Kuromd
 
       def initialize(params = {})
         super
-        config = Kuromd::Configurable.get_config
-        @params = config.params['journal']
-
-        @base_folder = @params['base_folder']
-        @base_folder = File.expand_path @base_folder
-
-        Kuromd.logger.info "Journal note initialized: #{@params}"
+        Kuromd.logger.info "Journal note initialized: #{@note_data['title']}"
       end
 
       def valid?
@@ -27,14 +21,13 @@ module Kuromd
         is_valid = !@note_data['title'].nil? &&
                    !@note_data['note_date'].nil?
 
-        Kuromd.logger.info "Journal Note object valid? #{is_valid}"
+        # Kuromd.logger.info "Journal Note object valid? #{is_valid}"
         is_valid
       end
 
       def process
-        Kuromd.logger.info 'Processing Journal Note'
-        folder = Kuromd::Journal::Folder.new({ base_path: @base_folder,
-                                               journal_date: @note_data['note_date'] })
+        Kuromd.logger.info "Processing Journal Note: #{@note_data['title']}, #{@note_data['note_date']}"
+        folder = Kuromd::Journal::Folder.new({ journal_date: @note_data['note_date'] })
         folder.move(filename: @note_data[:full_path]) if valid?
       end
     end

@@ -9,14 +9,20 @@ module Kuromd
     # Given a date and a base path, this object will create a place to file
     # a journal item
     class Folder
+      include Configurable
+
       attr_accessor :created, :journal_date, :base_path
       attr_reader   :full_day_path
 
       def initialize(params = {})
         raise 'Params required' if params.nil? == true
 
+        # TODO: If there is an existing configuration, use that configuration file
+        @config = Kuromd::Configurable.get_config
+        params = @config.params['journal']
+
         # @base_path is required will throw KeyError if not found
-        @base_path    = params.fetch(:base_path)
+        @base_path    = params['base_folder']
         @journal_date = params.fetch(:journal_date, Date.today)
 
         @full_day_path = build_date_path(Date.parse(@journal_date.to_s))
@@ -43,7 +49,7 @@ module Kuromd
         end
         dest = File.join(@full_day_path, file_to_move)
         Kuromd.logger.info "Move: #{fullpath} to #{dest}"
-        FileUtils.mv fullpath, dest
+        # FileUtils.mv fullpath, dest
       end
 
       private
