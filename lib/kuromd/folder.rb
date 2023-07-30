@@ -45,7 +45,6 @@ module Kuromd
       @notes.each do |note|
         note_objects = note[:note_objs]
         note_objects.each do |note_object|
-          # puts note_object
           note_object.process
         end
       end
@@ -61,17 +60,14 @@ module Kuromd
         note_data[:full_path] = full_path
         note_objs  = Kuromd::BaseNote.categorize({ note_data: })
         note_type = note_data['note_type']
-        # valid     = note_obj.valid?
         @notes.push({ filename:, full_path:, note_type:, note_objs: })
       end
     end
 
     def parse_markdown(file_full_path:)
       parser = RubyMatter.parse(File.read(file_full_path))
-
       note_data = parser.data
       note_data['content'] = parser.content
-
       note_data
     end
   end

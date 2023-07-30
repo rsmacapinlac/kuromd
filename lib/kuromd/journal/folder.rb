@@ -28,35 +28,22 @@ module Kuromd
         @created = true
       end
 
-      def save(filename:, noop: false)
-        _filename = File.expand_path(filename)
+      def move(filename:)
+        fullpath = File.expand_path(filename)
         create if @created == false
 
-        _noop = noop
+        file_date = DatesFromString.new.find_date(filename)[0]
+        file_date = '' if file_date.nil?
 
-        file_date = DatesFromString.new.find_date(filename)
-        date_found = !file_date.empty?
-        new_filename = File.basename(_filename)
-        if new_filename.index(file_date[0]) == 0 and date_found == true
+        file_to_move = File.basename(fullpath)
+        if file_to_move.index(file_date).zero? && !file_date.empty?
           # date was found in the beginning of the string, assume it follows
           # format: date - filename.ext
-          new_filename = new_filename.delete_prefix("#{file_date[0]} - ")
+          file_to_move = file_to_move.delete_prefix("#{file_date} - ")
         end
-        dest = File.join(@full_day_path, new_filename)
-        # puts "move: #{_filename} to #{dest}"
-        FileUtils.mv _filename, dest, noop: _noop
-      end
-
-      def self.organize(filename:, base_path:, dry_run: false)
-        _fullpath = File.expand_path(filename)
-        file_date = DatesFromString.new.find_date(_fullpath)
-        date_found = !file_date.empty?
-
-        # only organize ones that have a date in the filename
-        if date_found == true
-          _journal_folder = JournalFolder.new(journal_date: file_date, base_path: base_path)
-          _journal_folder.save(filename: _fullpath, noop: dry_run)
-        end
+        dest = File.join(@full_day_path, file_to_move)
+        Kuromd.logger.info "Move: #{fullpath} to #{dest}"
+        FileUtils.mv fullpath, dest
       end
 
       private
@@ -73,7 +60,7 @@ module Kuromd
                                   padded_month,
                                   day_folder)
 
-        return File.expand_path(folder_path)
+        File.expand_path(folder_path)
       end
     end
   end
