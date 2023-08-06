@@ -19,11 +19,10 @@ module Kuromd
 
         # TODO: If there is an existing configuration, use that configuration file
         @config = Kuromd::Configurable.get_config
-        params = @config.params['journal']
 
         # @base_path is required will throw KeyError if not found
-        @base_path    = params['base_folder']
-        @journal_date = params.fetch(:journal_date, Date.today)
+        @base_path    = @config.params['journal']['base_folder']
+        @journal_date = params[:journal_date]
 
         @full_day_path = build_date_path(Date.parse(@journal_date.to_s))
         @created = Dir.exist?(@full_day_path)
@@ -48,20 +47,20 @@ module Kuromd
           file_to_move = file_to_move.delete_prefix("#{file_date} - ")
         end
         dest = File.join(@full_day_path, file_to_move)
-        Kuromd.logger.info "Move: #{fullpath} to #{dest}"
-        # FileUtils.mv fullpath, dest
+        Kuromd.logger.info "Move: #{fullpath} to #{dest}" if FileUtils.mv fullpath, dest
       end
 
       private
 
       def build_date_path(working_date)
+        puts working_date
         padded_year   = working_date.year.to_s
         padded_month  = working_date.month.to_s.rjust(2, '0')
         padded_day    = working_date.mday.to_s.rjust(2, '0')
 
         day_folder    = "#{padded_day} #{Date::ABBR_DAYNAMES[working_date.wday]}"
 
-        folder_path   = File.join(base_path,
+        folder_path   = File.join(@base_path,
                                   padded_year,
                                   padded_month,
                                   day_folder)

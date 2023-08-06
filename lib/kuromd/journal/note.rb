@@ -39,6 +39,7 @@ module Kuromd
       def process
         Kuromd.logger.info "Processing Journal Note: #{@note_data['title']}, #{@note_data['note_date']}"
         folder = Kuromd::Journal::Folder.new({ journal_date: @note_data['note_date'] })
+        # puts folder.full_day_path
         folder.move(filename: @note_data[:full_path]) if valid?
       end
     end
