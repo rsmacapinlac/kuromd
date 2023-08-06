@@ -10,18 +10,29 @@ module Kuromd
     # base folder
     class Note < Kuromd::BaseNote
       attr_accessor :base_folder
+      NOTE_TYPE = 'Journal'
+
+      def self.note_type
+        NOTE_TYPE
+      end
+
+      def note_type
+        NOTE_TYPE
+      end
 
       def initialize(params = {})
         super
+
         Kuromd.logger.info "Journal note initialized: #{@note_data['title']}"
       end
 
       def valid?
         # needs a note_date and monica_id
-        is_valid = !@note_data['title'].nil? &&
-                   !@note_data['note_date'].nil?
+        if category?
+          is_valid = !@note_data['title'].nil? && !@note_data['note_date'].nil?
+        end
 
-        # Kuromd.logger.info "Journal Note object valid? #{is_valid}"
+        Kuromd.logger.info "Journal Note object valid? #{is_valid}"
         is_valid
       end
 

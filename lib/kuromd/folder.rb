@@ -58,8 +58,8 @@ module Kuromd
         full_path = File.join(@notes_folder, filename)
         note_data = parse_markdown(file_full_path: full_path)
         note_data[:full_path] = full_path
-        note_objs  = Kuromd::BaseNote.categorize({ note_data: })
-        note_type = note_data['note_type']
+        note_objs  = Kuromd::BaseNote.assign_note_objs({ note_data: })
+        note_type = Kuromd::BaseNote.categorize_by_note_objs({ note_data:, note_objs: })
         @notes.push({ filename:, full_path:, note_type:, note_objs: })
       end
     end
