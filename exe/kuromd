@@ -24,23 +24,27 @@ program :description, 'The main entry point for the command line utility'
 
 global_option('-c', '--config FILE', 'load config data for your commands to use')
 
-command :notes do |c|
-  c.syntax = 'kuromd notes [options]'
-  c.summary = 'Process a folder of notes'
-  c.description = 'This command will take a folder of markdown notes to process.'
-  c.example 'description', 'kuromd notes'
+command :process do |c|
+  c.syntax = 'kuromd process [options]'
+  c.summary = 'Process a folder'
+  c.description = 'This command will take a folder of files process.'
+  c.example 'description', 'kuromd process'
 
   c.action do |_args, options|
     # attempt to read config if the global config file is set
     Kuromd::Configurable.configure({ config_file: options.config, key: 'notes' })
     # config = Kuromd::Config.new({ config_file: options.config })
     config = Kuromd::Configurable.get_config
-    notes_folder = Kuromd::Folder.new
+    folder = Kuromd::Folder.new
 
-    # display the table
-    puts notes_folder.build_table
+    if !folder.notes.count.zero?
+      # display the table
+      puts folder.build_table
 
-    continue = ask("Do you want to process #{notes_folder.notes.count} notes? (y/n)")
-    notes_folder.process if continue == 'y'
+      continue = ask("Do you want to process #{folder.notes.count} notes? (y/n)")
+      folder.process if continue == 'y'
+    else
+      say('There are no notes to process.')
+    end
   end
 end

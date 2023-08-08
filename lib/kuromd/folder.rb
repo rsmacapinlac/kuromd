@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'kuromd/configurable'
+require 'kuromd/basefile'
 require 'kuromd/basenote'
 require 'ruby_matter'
 require 'terminal-table'
@@ -52,14 +53,20 @@ module Kuromd
 
     private
 
+    # TODO: refactor this (rubocop doesn't like it)
     def read_files
       Dir.chdir @notes_folder
-      Dir.glob('*.md') do |filename|
+      Dir.glob('*') do |filename|
         full_path = File.join(@notes_folder, filename)
-        note_data = parse_markdown(file_full_path: full_path)
-        note_data[:full_path] = full_path
-        note_objs  = Kuromd::BaseNote.assign_note_objs({ note_data: })
-        note_type = Kuromd::BaseNote.categorize_by_note_objs({ note_data:, note_objs: })
+        extension = File.extname(full_path)
+        if extension == '.md'
+          note_data = parse_markdown(file_full_path: full_path)
+          note_data[:full_path] = full_path
+          note_objs  = Kuromd::BaseNote.assign_note_objs({ note_data: })
+          note_type = Kuromd::BaseNote.categorize_by_note_objs({ note_data:, note_objs: })
+        else
+          note_objs = Kuromd::BaseFile.assign_file_objs({full_path: })
+        end
         @notes.push({ filename:, full_path:, note_type:, note_objs: })
       end
     end
