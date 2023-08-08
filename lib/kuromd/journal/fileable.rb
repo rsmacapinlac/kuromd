@@ -9,12 +9,12 @@ module Kuromd
     # defines the functions for managing files and folders for journals
     module Fileable
       def create_journal_folder(base_path:, date:)
-        date = Date.parse(date.to_s) 
+        date = Date.parse(date.to_s)
         full_date_path = build_date_path(base_path:, date:)
         Kuromd.logger.info "Creating folder #{full_date_path}" if FileUtils.mkdir_p full_date_path
         full_date_path
       end
-      
+
       def fileable?
         fileable = true
         fileable = false if @file_date.nil?

@@ -19,6 +19,7 @@ module Kuromd
 
         # TODO: If there is an existing configuration, use that configuration file
         @config = Kuromd::Configurable.get_config
+        puts @config.params
 
         # @base_path is required will throw KeyError if not found
         @base_path    = @config.params['journal']['base_folder']
@@ -60,6 +61,7 @@ module Kuromd
 
         day_folder    = "#{padded_day} #{Date::ABBR_DAYNAMES[working_date.wday]}"
 
+        puts @base_path
         folder_path   = File.join(@base_path,
                                   padded_year,
                                   padded_month,
