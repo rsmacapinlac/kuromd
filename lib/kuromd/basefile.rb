@@ -3,8 +3,7 @@
 module Kuromd
   # Super class for all Notes
   class BaseFile
-    def initialize(params = {})
-    end
+    def initialize(params = {}); end
 
     def valid?; end
     def process; end

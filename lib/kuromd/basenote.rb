@@ -4,6 +4,7 @@ module Kuromd
   # Super class for all Notes
   class BaseNote
     attr_accessor :note_data
+
     NOTE_TYPE = nil
 
     def initialize(params = {})
