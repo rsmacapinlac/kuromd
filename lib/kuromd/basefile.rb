@@ -15,6 +15,12 @@ module Kuromd
       objs.push(Kuromd::Journal::File.new(params))
     end
 
+    def self.cleanup_types
+      note_type = []
+      note_type.push('Journal File')
+      note_type
+    end
+
     private_class_method def self.autoload_files
       require 'kuromd/journal/file'
     end

@@ -66,6 +66,7 @@ module Kuromd
           note_type = Kuromd::BaseNote.categorize_by_note_objs({ note_data:, note_objs: })
         else
           note_objs = Kuromd::BaseFile.assign_file_objs({full_path: })
+          note_type = Kuromd::BaseFile.cleanup_types
         end
         @notes.push({ filename:, full_path:, note_type:, note_objs: })
       end
