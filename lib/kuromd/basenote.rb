@@ -3,42 +3,44 @@
 module Kuromd
   # Super class for all Notes
   class BaseNote
-    attr_accessor :note_data
-
-    NOTE_TYPE = nil
+    attr_accessor :config, :note_data, :note_type
 
     def initialize(params = {})
       raise 'Params required' if params.nil?
 
+      @config = params[:config]
       @note_data = params[:note_data]
-
       # ensure path is absolute
-      @note_path = @note_data[:full_path]
+      @note_path = @note_data['full_path']
       @note_path = File.expand_path(@note_path)
     end
 
-    def note_type; end
-    def self.note_type; end
     def valid?; end
     def process; end
+
+    def self.parse_markdown(filepath:)
+      parser = RubyMatter.parse(File.read(filepath))
+      note_data = parser.data
+      note_data['content'] = parser.content
+      note_data['full_path'] = filepath
+      note_data
+    end
 
     def self.assign_note_objs(params = {})
       autoload_notes
 
       objs = []
       note_data = params[:note_data]
-      note_type = cleanup_note_types(note_data)
+      config = params[:config]
 
-      self.descendants.each do |descendant|
-        obj = descendant.new({ note_data: })
+      # if the note type is not an array, make it one
+      # note_type = cleanup_note_types(note_data)
+      # puts note_type
+
+      descendants.each do |descendant|
+        obj = descendant.new({ note_data:, config: })
         objs.push(obj) if obj.valid?
       end
-
-      # puts note_type.include?("Journal")
-      # obj = Kuromd::OneOnOne::Note.new({ note_data: }) if note_type.include?('One on one')
-      # objs.push(obj) if obj.valid?
-      # obj = Kuromd::Journal::Note.new({ note_data: }) if note_type.include?('Journal')
-      # objs.push(obj) if obj.valid?
 
       objs
     end
@@ -52,7 +54,8 @@ module Kuromd
       note_types = []
 
       note_objs.each do |note_obj|
-        note_types.push(note_obj.note_type)
+        # puts note_obj.valid?
+        note_types.push(note_obj.note_type) if note_obj.valid?
       end
 
       note_types
@@ -82,7 +85,8 @@ module Kuromd
     private
 
     def category?
-      @note_data['note_type'].include?(note_type)
+      Kuromd.logger.debug "@note_data['note_type']: #{@note_data['note_type']}, @note_type: #{@note_type} "
+      @note_data['note_type'].include?(@note_type)
     end
   end
 end

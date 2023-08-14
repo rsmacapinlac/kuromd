@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+require 'dotenv'
 require 'yaml'
 require 'kuromd'
 
 module Kuromd
   # Handles pulling the configuration from a configuration file.
   class Config
-    attr_accessor :params
+    attr_accessor :params, :config_filepath
 
     def configuration_folder
       '~/.config/kuromd'
@@ -25,17 +26,23 @@ module Kuromd
     end
 
     def initialize(params = {})
-      key = params[:key]
-      config_file = File.expand_path(File.join(configuration_folder, configuration_file))
-      # replace the configuration with what was passed
-      config_file = File.expand_path params[:config_file] unless params[:config_file].nil?
+      Dotenv.load
 
+      @config_filepath = File.join(configuration_folder, configuration_file)
+      @config_filepath = params[:config_file] unless params[:config_file].nil?
+      config_file = File.expand_path(@config_filepath)
+      # Kuromd.logger.info "Configuration file: #{config_file}"
+
+      # replace the configuration with what was passed
       @params = YAML.load(File.read(config_file))
 
-      # narrow down the parameters if a key is present
-      # @params = @params[key] unless key.nil?
-      Kuromd.logger.info "Configuration initialized: #{config_file} with key: #{key}"
-      # get_config(key)
+      # assume production unless otherwise specified
+      @params['environment'] = 'production'
+      unless ENV['ENVIRONMENT'].nil?
+        @params['environment'] = ENV['ENVIRONMENT']
+      end
+
+      Kuromd.logger.info "Configuration initialized: #{config_file}" unless @params.nil?
     end
   end
 end

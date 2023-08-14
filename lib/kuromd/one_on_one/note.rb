@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'kuromd/configurable'
 require 'kuromd/basenote'
 require 'kuromd/postable'
 
@@ -8,27 +7,19 @@ module Kuromd
   module OneOnOne
     # Represents a note for a 1:1
     class Note < Kuromd::BaseNote
-      include Configurable
       include Postable
 
       attr_accessor :params, :note_data, :note_path, :one_on_one_url
       NOTE_TYPE = 'One on one'
 
-      def self.note_type
-        NOTE_TYPE
-      end
-
-      def note_type
-        NOTE_TYPE
-      end
-
       def initialize(params = {})
-        super
-        # @note_data['note_type'] = 'One on one'
+        super(params)
+        # config = Kuromd::Configurable.get_config
+        # @params = config.params['notes']['one_on_one']
+        @params = @config.params['notes']['one_on_one']
 
-        config = Kuromd::Configurable.get_config
-        @params = config.params['notes']['one_on_one']
-        Kuromd.logger.info "One on one note initialized: #{@params}"
+        @note_type = NOTE_TYPE
+        Kuromd.logger.info "One on one note initialized: #{@note_data}, #{@params}"
       end
 
       def valid?
@@ -42,16 +33,18 @@ module Kuromd
                      !@note_data['title'].nil?
         end
 
-        Kuromd.logger.info "One on One Note object valid? #{is_valid}"
+        Kuromd.logger.info "One on One note object valid? #{is_valid}"
         is_valid
       end
 
       def process
-        Kuromd.logger.info "Processing One on one Note: #{@note_data['title']}, #{@note_data['note_date']}"
+        return unless valid?
+
         url = @params['url']
+        Kuromd.logger.info "Processing One on one note: #{@note_data['title']}, #{@note_data['note_date']} to #{url}"
 
         # Invoke Kuromd::Note::Postable's send method
-        send(url, @note_data) if valid?
+        send(url, @note_data)
       end
     end
   end

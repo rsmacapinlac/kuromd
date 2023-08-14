@@ -5,46 +5,39 @@
 require 'rubygems'
 require 'commander/import'
 
-require 'kuromd/configurable'
+require 'kuromd/config'
 require 'kuromd/folder'
 require 'kuromd/version'
-
-require 'fileutils'
-require 'pathname'
-
-include Kuromd::Configurable
 
 OptionParser.accept Pathname do |path|
   Pathname.new path if path
 end
 
-program :name, 'kuromd'
+program :name, 'kuroman'
 program :version, Kuromd::VERSION
-program :description, 'The main entry point for the command line utility'
+program :description, 'These scripts will help you manage things (ie Kuroman - Kuro \'manage\').'
 
 global_option('-c', '--config FILE', 'load config data for your commands to use')
 
-command :process do |c|
-  c.syntax = 'kuromd process [options]'
+command :inbox do |c|
+  c.syntax = 'kuroman inbox [options]'
   c.summary = 'Process a folder'
-  c.description = 'This command will take a folder of files process.'
-  c.example 'description', 'kuromd process'
+  c.description = 'This command will process an \'inbox\' of files.'
+  c.example 'description', 'kuroman inbox'
 
   c.action do |_args, options|
     # attempt to read config if the global config file is set
-    Kuromd::Configurable.configure({ config_file: options.config, key: 'notes' })
-    # config = Kuromd::Config.new({ config_file: options.config })
-    config = Kuromd::Configurable.get_config
-    folder = Kuromd::Folder.new
+    config = Kuromd::Config.new({ config_file: options.config })
+    folder = Kuromd::Folder.new({ config: config })
 
     if !folder.notes.count.zero?
       # display the table
-      puts folder.build_table
+      say folder.build_table
 
       continue = ask("Do you want to process #{folder.notes.count} notes? (y/n)")
-      folder.process if continue == 'y'
+      folder.process if continue.downcase! == 'y'
     else
-      say('There are no notes to process.')
+      say('There are no files to process.')
     end
   end
 end

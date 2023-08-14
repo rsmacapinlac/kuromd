@@ -15,36 +15,19 @@ module Kuromd
         full_date_path
       end
 
-      def fileable?
-        fileable = true
-        fileable = false if @file_date.nil?
-        fileable
+      def find_date_from_filename(filepath)
+        DatesFromString.new.find_date(filepath)[0]
       end
 
-      def find_date_from_filename
-        DatesFromString.new.find_date(@file_path)[0]
-      end
+      def move(params = {})
+        dest_folder = params[:dest_folder]
+        source_file = ::File.expand_path(params[:source_path])
 
-      def move(dest_folder:, filename:)
-        fullpath = ::File.expand_path(filename)
-        dest_folder = ::File.expand_path(dest_folder)
+        dest_filename = ::File.basename(source_file)
+        dest_filename = params[:rename_to] unless params[:rename_to].nil?
 
-        file_to_move = ::File.basename(fullpath)
-        extname = ::File.extname(fullpath)
-
-        if file_to_move.index(file_date).zero?
-          # date was found in the beginning of the string, assume it follows
-          # format: date - filename.ext
-          file_to_move.delete_prefix!("#{file_date} - ")
-        else
-          # date was note found in the beginning of the string, assume it follows
-          # format: filename - date.ext
-          file_to_move.delete_suffix!(" - #{file_date}#{extname}")
-          file_to_move = "#{file_to_move}#{extname}"
-        end
-        dest = ::File.join(dest_folder, file_to_move)
-        Kuromd.logger.info "Move: #{fullpath} to #{dest}" if FileUtils.mv fullpath, dest
-        # Kuromd.logger.info "Move: #{fullpath} to #{dest}"
+        destination = ::File.join(dest_folder, dest_filename)
+        Kuromd.logger.info "Move: #{source_file} to #{destination}" if FileUtils.mv source_file, destination
       end
 
       private

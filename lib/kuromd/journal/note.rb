@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'kuromd/basenote'
-require 'kuromd/journal/folder'
+require 'kuromd/journal/fileable'
+# require 'kuromd/journal/folder'
 
 module Kuromd
   module Journal
@@ -9,38 +10,44 @@ module Kuromd
     # process method will organize the note into it's
     # base folder
     class Note < Kuromd::BaseNote
-      attr_accessor :base_folder
+      include Fileable
+
+      attr_accessor :params, :base_folder, :file_path, :file_date
+
       NOTE_TYPE = 'Journal'
 
-      def self.note_type
-        NOTE_TYPE
-      end
-
-      def note_type
-        NOTE_TYPE
-      end
-
       def initialize(params = {})
-        super
+        super(params)
 
-        Kuromd.logger.info "Journal note initialized: #{@note_data['title']}"
+        @params = @config.params['journal']
+        @base_folder = @params['base_folder']
+
+        @file_path = params[:full_path]
+        @file_date = @note_data['note_date']
+
+        @note_type = NOTE_TYPE
+        Kuromd.logger.info "Journal note initialized: #{@note_data}, #{@params}"
       end
 
       def valid?
-        # needs a note_date and monica_id
-        if category?
-          is_valid = !@note_data['title'].nil? && !@note_data['note_date'].nil?
-        end
+        # needs a title and a note_date
+        is_valid = false
+        is_valid = !@note_data['title'].nil? && !@note_data['note_date'].nil? if category?
 
         Kuromd.logger.info "Journal Note object valid? #{is_valid}"
         is_valid
       end
 
       def process
+        return unless valid?
+
         Kuromd.logger.info "Processing Journal Note: #{@note_data['title']}, #{@note_data['note_date']}"
-        folder = Kuromd::Journal::Folder.new({ journal_date: @note_data['note_date'] })
-        # puts folder.full_day_path
-        folder.move(filename: @note_data[:full_path]) if valid?
+        journal_folder = create_journal_folder(base_path: @base_folder, date: @file_date)
+        new_filename = "#{@note_data['title']}#{::File.extname(@note_path)}"
+
+        move({ dest_folder: journal_folder,
+               source_path: @note_path,
+               rename_to: new_filename })
       end
     end
   end
