@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
 
   # Uncomment to register a new dependency of your gem
+  spec.add_dependency 'activesupport', '~> 7.0.6'
   spec.add_dependency 'commander', '~> 4.6.0'
   spec.add_dependency 'dates_from_string', '~> 0.9.7'
   spec.add_dependency 'dotenv', '~> 2.8.1'
