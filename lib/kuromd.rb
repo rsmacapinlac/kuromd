@@ -14,7 +14,6 @@ module Kuromd
 
   # TODO: create the ability to configure logger
   def self.logger
-
     if @logger.nil?
       env = ENV['ENVIRONMENT']
       @logger = init_logger(env)
@@ -33,7 +32,7 @@ module Kuromd
     logfile = "logs/#{env}.log"
     logger = Logger.new(logfile)
     if env == 'development'
-      logger = Logger.new(STDOUT)
+      logger = Logger.new($stdout)
       logger.level = Logger::DEBUG
     end
     logger

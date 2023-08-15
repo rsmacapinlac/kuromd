@@ -31,17 +31,11 @@ module Kuromd
       @config_filepath = File.join(configuration_folder, configuration_file)
       @config_filepath = params[:config_file] unless params[:config_file].nil?
       config_file = File.expand_path(@config_filepath)
-      # Kuromd.logger.info "Configuration file: #{config_file}"
-
-      # replace the configuration with what was passed
-      @params = {}
       @params = YAML.load(File.read(config_file)) if File.exist?(config_file)
 
       # assume production unless otherwise specified
       @params['environment'] = 'production'
-      unless ENV['ENVIRONMENT'].nil?
-        @params['environment'] = ENV['ENVIRONMENT']
-      end
+      @params['environment'] = ENV['ENVIRONMENT'] unless ENV['ENVIRONMENT'].nil?
 
       Kuromd.logger.info "Configuration initialized: #{config_file}" unless @params.nil?
     end

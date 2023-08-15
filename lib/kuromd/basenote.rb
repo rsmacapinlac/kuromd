@@ -48,7 +48,6 @@ module Kuromd
     def self.categorize_by_note_objs(params = {})
       autoload_notes
 
-      note_data = params[:note_data]
       note_objs = params[:note_objs]
 
       note_types = []
@@ -59,7 +58,6 @@ module Kuromd
       end
 
       note_types
-
     end
 
     private_class_method def self.descendants

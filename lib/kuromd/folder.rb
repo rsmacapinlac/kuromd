@@ -60,7 +60,6 @@ module Kuromd
         full_path = File.join(@folder_path, filename)
         extension = File.extname(full_path)
 
-
         # ignore any folders in the identified folder
         unless File.directory?(full_path)
           if extension == '.md'

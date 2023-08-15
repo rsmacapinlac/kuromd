@@ -18,9 +18,7 @@ RSpec.describe Kuromd::Config do
     it 'should return parameters' do
       fixtures_config_file = 'spec/fixtures/configuration.yml'
       params = YAML.load(File.read(File.expand_path(fixtures_config_file)))
-      config = Kuromd::Config.new({
-        config_file: fixtures_config_file
-      })
+      config = Kuromd::Config.new({ config_file: fixtures_config_file })
       params['environment'] = ENV['ENVIRONMENT']
       expect(config.params).to eq params
     end

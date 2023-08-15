@@ -28,7 +28,7 @@ command :inbox do |c|
   c.action do |_args, options|
     # attempt to read config if the global config file is set
     config = Kuromd::Config.new({ config_file: options.config })
-    folder = Kuromd::Folder.new({ config: config })
+    folder = Kuromd::Folder.new({ config: })
 
     if !folder.notes.count.zero?
       # display the table
