@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kuromd (0.1.0)
+    kuromd (0.0.1)
       activesupport (~> 7.0.6)
       commander (~> 4.6.0)
       dates_from_string (~> 0.9.7)
