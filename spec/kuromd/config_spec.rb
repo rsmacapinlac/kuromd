@@ -6,7 +6,8 @@ RSpec.describe Kuromd::Config do
   describe 'initialization' do
     it 'has defaults' do
       config = Kuromd::Config.new
-      expect(config.config_filepath).to eq '~/.config/kuromd/configuration.yml'
+      expect(config.configuration_folder).to eq '~/.config/kuromd'
+      expect(config.configuration_file).to eq 'configuration.yml'
     end
     it 'can accept a config file' do
       config = Kuromd::Config.new({

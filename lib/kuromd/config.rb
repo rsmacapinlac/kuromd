@@ -34,6 +34,7 @@ module Kuromd
       # Kuromd.logger.info "Configuration file: #{config_file}"
 
       # replace the configuration with what was passed
+      @params = {}
       @params = YAML.load(File.read(config_file)) if File.exist?(config_file)
 
       # assume production unless otherwise specified
