@@ -20,6 +20,7 @@ RSpec.describe Kuromd::Config do
       config = Kuromd::Config.new({
         config_file: fixtures_config_file
       })
+      params['environment'] = ENV['ENVIRONMENT']
       expect(config.params).to eq params
     end
   end
