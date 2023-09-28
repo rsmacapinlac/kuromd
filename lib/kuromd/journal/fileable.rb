@@ -19,6 +19,17 @@ module Kuromd
         DatesFromString.new.find_date(filepath)[0]
       end
 
+      def copy(params = {})
+        dest_folder = params[:dest_folder]
+        source_file = ::File.expand_path(params[:source_path])
+
+        dest_filename = ::File.basename(source_file)
+        dest_filename = params[:rename_to] unless params[:rename_to].nil?
+
+        destination = ::File.join(dest_folder, dest_filename)
+        Kuromd.logger.info "Copy: #{source_file} to #{destination}" if FileUtils.cp source_file, destination
+      end
+
       def move(params = {})
         dest_folder = params[:dest_folder]
         source_file = ::File.expand_path(params[:source_path])

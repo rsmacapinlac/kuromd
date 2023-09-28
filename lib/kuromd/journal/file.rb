@@ -20,7 +20,7 @@ module Kuromd
       def initialize(params = {})
         super
 
-        @config = Kuromd::Configurable.get_config
+        @config = params[:config]
         @base_folder = @config.params['journal']['base_folder']
 
         @file_path = params[:full_path]

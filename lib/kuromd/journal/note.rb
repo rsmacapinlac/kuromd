@@ -45,7 +45,7 @@ module Kuromd
         journal_folder = create_journal_folder(base_path: @base_folder, date: @file_date)
         new_filename = "#{@note_data['title']}#{::File.extname(@note_path)}"
 
-        move({ dest_folder: journal_folder,
+        copy({ dest_folder: journal_folder,
                source_path: @note_path,
                rename_to: new_filename })
       end

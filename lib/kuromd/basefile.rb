@@ -14,6 +14,7 @@ module Kuromd
     def self.assign_file_objs(params = {})
       autoload_files
       objs = []
+      puts params
       objs.push(Kuromd::Journal::File.new(params))
     end
 

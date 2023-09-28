@@ -28,14 +28,14 @@ command :inbox do |c|
   c.action do |_args, options|
     # attempt to read config if the global config file is set
     config = Kuromd::Config.new({ config_file: options.config })
-    folder = Kuromd::Folder.new({ config: })
+    folder = Kuromd::Folder.new({ config: config })
 
     if !folder.notes.count.zero?
       # display the table
       say folder.build_table
 
       continue = ask("Do you want to process #{folder.notes.count} notes? (y/n)")
-      folder.process if continue.downcase! == 'y'
+      folder.process if continue.downcase == 'y'
     else
       say('There are no files to process.')
     end
